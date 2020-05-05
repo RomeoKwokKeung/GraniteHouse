@@ -99,3 +99,4 @@ C:\Users\solom\source\repos\GraniteHouse\GraniteHouse\obj\Debug\netcoreapp2.1\Ra
 C:\Users\solom\source\repos\GraniteHouse\GraniteHouse\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\Appointments\Edit.cshtml.g.cs
 C:\Users\solom\source\repos\GraniteHouse\GraniteHouse\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\Appointments\Delete.cshtml.g.cs
 C:\Users\solom\source\repos\GraniteHouse\GraniteHouse\obj\Debug\netcoreapp2.1\Razor\Areas\Admin\Views\Appointments\Details.cshtml.g.cs
+C:\Users\solom\source\repos\GraniteHouse\GraniteHouse\obj\Debug\netcoreapp2.1\Razor\Views\Shared\Components\UserName\Default.cshtml.g.cs

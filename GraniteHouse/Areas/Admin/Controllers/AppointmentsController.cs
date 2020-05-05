@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using GraniteHouse.Data;
 using GraniteHouse.Models;
@@ -9,6 +10,7 @@ using GraniteHouse.Models.ViewModel;
 using GraniteHouse.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
 namespace GraniteHouse.Areas.Admin.Controllers
@@ -18,13 +20,15 @@ namespace GraniteHouse.Areas.Admin.Controllers
     public class AppointmentsController : Controller
     {
         private readonly ApplicationDbContext _db;
+        //5 appointments per page
+        private int pageSize = 5;
 
         public AppointmentsController(ApplicationDbContext db)
         {
             _db = db;
         }
 
-        public IActionResult Index(string searchName = null, string searchEmail = null, string searchPhone = null, string searchDate = null)
+        public IActionResult Index(int productPage = 1, string searchName = null, string searchEmail = null, string searchPhone = null, string searchDate = null)
         {
             //return the id that the user logged in
             System.Security.Claims.ClaimsPrincipal currentUser = this.User;
@@ -36,6 +40,30 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 Appointments = new List<Models.Appointments>()
             };
 
+            StringBuilder param = new StringBuilder();
+
+            //for search function
+            param.Append("/Admin/Appointments?productpage=");
+            param.Append("&searchName=");
+            if (searchName != null)
+            {
+                param.Append(searchName);
+            }
+            param.Append("&searchEmail=");
+            if (searchEmail != null)
+            {
+                param.Append(searchEmail);
+            }
+            param.Append("&searchPhone=");
+            if (searchPhone != null)
+            {
+                param.Append(searchPhone);
+            }
+            param.Append("&searchDate=");
+            if (searchDate != null)
+            {
+                param.Append(searchDate);
+            }
 
             //recoginze admin or super admin
             appointmentVM.Appointments = _db.Appointments.Include(a => a.SalesPerson).ToList();
@@ -69,6 +97,21 @@ namespace GraniteHouse.Areas.Admin.Controllers
                     throw ex;
                 }
             }
+
+            //count how many do we have to fulfill our requirements
+            var count = appointmentVM.Appointments.Count;
+
+            appointmentVM.Appointments = appointmentVM.Appointments.OrderBy(p => p.AppointmentDate)
+                .Skip((productPage - 1) * pageSize)
+                .Take(pageSize).ToList();
+
+            appointmentVM.PagingInfo = new PagingInfo
+            {
+                CurrentPage = productPage,
+                ItemsPerPage = pageSize,
+                TotalItems = count,
+                urlParam = param.ToString()
+            };
 
             return View(appointmentVM);
         }
