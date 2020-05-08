@@ -15,13 +15,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GraniteHouse.Areas.Admin.Controllers
 {
-    [Authorize(Roles = SD.SuperAdminEndUser)]
+    [Authorize(Roles = (SD.AdminEndUser + "," + SD.SuperAdminEndUser))]
     [Area("Admin")]
     public class ProductsController : Controller
     {
-        //Dependency injection, as a cloud
+        //Dependency injection, as a cloud (this must be added into startup.cs
         private readonly ApplicationDbContext _db;
+        //for the image
         private readonly IHostingEnvironment _hostingEnvironment;
+        //auto bind the viewmodel, dont need to add it to argument
         [BindProperty]
         public ProductsViewModel ProductsVM { get; set; }
 
@@ -39,6 +41,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
             };
 
         }
+        //index page doesnt need to access ViewModel becuz we can get product type/specialTag from the product model
         public async Task<IActionResult> Index()
         {
             var products = _db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTags);
@@ -54,7 +57,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
         //Post : Products Create
         [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
-        //already [BlindProperty]
+        //already [BlindProperty], dont need to input an argument here
         public async Task<IActionResult> CreatePOST()
         {
             if (!ModelState.IsValid)
@@ -62,6 +65,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
                 return View(ProductsVM);
             }
 
+            //add product to database but not image
             _db.Products.Add(ProductsVM.Products);
             await _db.SaveChangesAsync();
 
@@ -70,26 +74,31 @@ namespace GraniteHouse.Areas.Admin.Controllers
             // request file uploaded from the view
             var files = HttpContext.Request.Form.Files;
 
+            //get the current creating file
             var productsFromDb = _db.Products.Find(ProductsVM.Products.Id);
 
             if (files.Count != 0)
             {
-                //Image has been uploaded
+                //Image has been uploaded (wwwroot/images/ProductImage)
                 var uploads = Path.Combine(webRootPath, SD.ImageFolder);
+                //file can be more than one so we write files[0]
                 var extension = Path.GetExtension(files[0].FileName);
 
                 //copy files from uploaded to the server
                 using (var filestream = new FileStream(Path.Combine(uploads, ProductsVM.Products.Id + extension), FileMode.Create))
                 {
+                    //rename the image
                     files[0].CopyTo(filestream);
                 }
+                //update the product from the datebase
                 productsFromDb.Image = @"\" + SD.ImageFolder + @"\" + ProductsVM.Products.Id + extension;
             }
             else
             {
-                //when user doesn't upload image
+                //when user doesn't upload image, we use default image
                 var uploads = Path.Combine(webRootPath, SD.ImageFolder + @"\" + SD.DefaultProductImage);
                 System.IO.File.Copy(uploads, webRootPath + @"\" + SD.ImageFolder + @"\" + ProductsVM.Products.Id + ".png");
+                //update the product from the datebase
                 productsFromDb.Image = @"\" + SD.ImageFolder + @"\" + ProductsVM.Products.Id + ".png";
             }
             await _db.SaveChangesAsync();
@@ -125,25 +134,31 @@ namespace GraniteHouse.Areas.Admin.Controllers
             if (ModelState.IsValid)
             {
                 string webRootPath = _hostingEnvironment.WebRootPath;
+                //get the file the user uploaded
                 var files = HttpContext.Request.Form.Files;
-
+                //find the existing image
                 var productFromDb = _db.Products.Where(m => m.Id == ProductsVM.Products.Id).FirstOrDefault();
 
                 if (files.Count > 0 && files[0] != null)
                 {
                     //if user uploads a new image
+                    //retrieve the folder where the image is uploaded or the image already existed
                     var uploads = Path.Combine(webRootPath, SD.ImageFolder);
                     var extension_new = Path.GetExtension(files[0].FileName);
                     var extension_old = Path.GetExtension(productFromDb.Image);
 
+                    //delete the old file
                     if (System.IO.File.Exists(Path.Combine(uploads, ProductsVM.Products.Id + extension_old)))
                     {
                         System.IO.File.Delete(Path.Combine(uploads, ProductsVM.Products.Id + extension_old));
                     }
+                    //copy files from uploaded to the server
                     using (var filestream = new FileStream(Path.Combine(uploads, ProductsVM.Products.Id + extension_new), FileMode.Create))
                     {
+                        //rename the file
                         files[0].CopyTo(filestream);
                     }
+                    //add the image on the server
                     ProductsVM.Products.Image = @"\" + SD.ImageFolder + @"\" + ProductsVM.Products.Id + extension_new;
                 }
 
@@ -152,6 +167,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
                     productFromDb.Image = ProductsVM.Products.Image;
                 }
 
+                //change all the properties of the product
                 productFromDb.Name = ProductsVM.Products.Name;
                 productFromDb.Price = ProductsVM.Products.Price;
                 productFromDb.Available = ProductsVM.Products.Available;
@@ -162,7 +178,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-
+            //if the ModelState is not valid
             return View(ProductsVM);
         }
 
@@ -222,11 +238,12 @@ namespace GraniteHouse.Areas.Admin.Controllers
             {
                 var uploads = Path.Combine(webRootPath, SD.ImageFolder);
                 var extension = Path.GetExtension(products.Image);
-
+                //delete the image
                 if (System.IO.File.Exists(Path.Combine(uploads, products.Id + extension)))
                 {
                     System.IO.File.Delete(Path.Combine(uploads, products.Id + extension));
                 }
+                //delete the whole product
                 _db.Products.Remove(products);
                 await _db.SaveChangesAsync();
 

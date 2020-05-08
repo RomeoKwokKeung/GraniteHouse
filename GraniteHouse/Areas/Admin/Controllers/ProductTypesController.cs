@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace GraniteHouse.Areas.Admin.Controllers
 {
-    [Authorize(Roles = SD.SuperAdminEndUser)]
+    [Authorize(Roles = (SD.AdminEndUser + "," + SD.SuperAdminEndUser))]
     [Area("Admin")]
     public class ProductTypesController : Controller
     {
@@ -35,12 +35,15 @@ namespace GraniteHouse.Areas.Admin.Controllers
 
         //Post Create action method
         [HttpPost]
+        //check if it is valid, to prevent hacker or something input wrong
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ProductTypes productTypes)
         {
+            //check the validation, e.g. [Required] from Models Folder
             if (ModelState.IsValid)
             {
                 _db.Add(productTypes);
+                //we use anysc so we have to use await
                 await _db.SaveChangesAsync();
                 //avoid spelling mistakes
                 return RedirectToAction(nameof(Index));
@@ -57,6 +60,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
             }
 
             var productType = await _db.ProductTypes.FindAsync(id);
+
             if (productType == null)
             {
                 return NotFound();
@@ -70,6 +74,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, ProductTypes productTypes)
         {
+            //if wrong id
             if (id != productTypes.Id)
             {
                 return NotFound();
@@ -102,7 +107,7 @@ namespace GraniteHouse.Areas.Admin.Controllers
             return View(productType);
         }
 
-        //Get Delete action method
+        //Get Delete action method, same as Details and Edit get method
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

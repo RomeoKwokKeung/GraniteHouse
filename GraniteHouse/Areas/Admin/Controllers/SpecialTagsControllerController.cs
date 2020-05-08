@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GraniteHouse.Areas.Admin.Controllers
 {
-    [Authorize(Roles = SD.SuperAdminEndUser)]
+    [Authorize(Roles = (SD.AdminEndUser + "," + SD.SuperAdminEndUser))]
     [Area("Admin")]
     public class SpecialTagsController : Controller
     {

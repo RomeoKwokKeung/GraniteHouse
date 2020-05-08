@@ -1,4 +1,5 @@
-﻿@model IEnumerable<GraniteHouse.Models.ProductTypes>
+﻿<!--IEnumerable means a list-->
+@model IEnumerable<GraniteHouse.Models.ProductTypes>
 @{
     ViewData["Title"] = "Index";
 }
@@ -32,6 +33,7 @@
                     @Html.DisplayFor(m=>item.Name)
                 </td>
                 <td>
+                    <!--pass the id of product type to Partial view-->
                     <partial name="_TableButtonPartial" model="item.Id" />
                 </td>
             </tr>

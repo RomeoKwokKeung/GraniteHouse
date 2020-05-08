@@ -7,6 +7,7 @@ namespace GraniteHouse.Models.ViewModel
 {
     public class ProductsViewModel
     {
+        //each product will be retrieved from the View Model
         public Products Products { get; set; }
         public IEnumerable<ProductTypes> ProductTypes { get; set; }
         public IEnumerable<SpecialTags> SpecialTags { get; set; }

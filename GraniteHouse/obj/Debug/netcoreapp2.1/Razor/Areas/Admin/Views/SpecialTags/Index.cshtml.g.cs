@@ -63,7 +63,7 @@ using GraniteHouse.Models;
             WriteLiteral("\r\n<br />\r\n<br />\r\n\r\n<div class=\"row\">\r\n    <div class=\"col-6\">\r\n        <h2 class=\"text-info\"> Special Tags List</h2>\r\n    </div>\r\n    <div class=\"col-6 text-right\">\r\n        ");
             EndContext();
             BeginContext(269, 97, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c4a17d2fd2d8484180dde48651e6af44", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a75e4f6e720a4d7d925e6cb291edcedd", async() => {
                 BeginContext(313, 49, true);
                 WriteLiteral("<i class=\"fas fa-plus\"></i>&nbsp; New Special Tag");
                 EndContext();
@@ -115,7 +115,7 @@ using GraniteHouse.Models;
             WriteLiteral("\r\n                </td>\r\n                <td>\r\n                    ");
             EndContext();
             BeginContext(845, 54, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "d6316fc1923a4c0399e7b3f6e655b9f5", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "bd873154fda54a309cf78d2cae860131", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_PartialTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.PartialTagHelper>();

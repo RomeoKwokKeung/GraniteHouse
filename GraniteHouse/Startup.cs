@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using GraniteHouse.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Security.Cryptography.X509Certificates;
 
 namespace GraniteHouse
 {
@@ -37,12 +38,12 @@ namespace GraniteHouse
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-
-            //for making super admin work
             services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IDbInitializer, DbInitializer>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -51,10 +52,11 @@ namespace GraniteHouse
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
             });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IDbInitializer dbInitializer)
         {
             if (env.IsDevelopment())
             {
@@ -71,6 +73,7 @@ namespace GraniteHouse
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            dbInitializer.Initialize();
             app.UseAuthentication();
             app.UseSession();
             app.UseMvc(routes =>
@@ -80,6 +83,9 @@ namespace GraniteHouse
                   template: "{area=Customer}/{controller=Home}/{action=Index}/{id?}"
                 );
             });
+
+
+
         }
     }
 }

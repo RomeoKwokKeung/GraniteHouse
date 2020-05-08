@@ -7,7 +7,9 @@ namespace GraniteHouse.Utility
 {
     public class SD
     {
+        //default image if user didnt upload an image
         public const string DefaultProductImage = "default_image.png";
+        //image folder path
         public const string ImageFolder = @"images\ProductImage";
 
         public const string AdminEndUser = "Admin";

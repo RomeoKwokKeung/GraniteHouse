@@ -1,7 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Http
 @using GraniteHouse.Extensions
 @using GraniteHouse.Utility
-
+<!--using session-->
 @inject IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
@@ -37,7 +37,7 @@
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item"><a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Index">Home</a></li>
 
-                @if (User.IsInRole(SD.SuperAdminEndUser))
+                @if (User.IsInRole(SD.SuperAdminEndUser) || User.IsInRole(SD.AdminEndUser))
                 {
                     <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="ProductTypes" asp-action="Index">Product Types</a></li>
                     <li class="nav-item"><a class="nav-link" asp-area="Admin" asp-controller="SpecialTags" asp-action="Index">Special Tags</a></li>

@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace GraniteHouse.Extensions
 {
+    //extensions must be static
     public static class IEnumerableExtensions
     {
+        //converting IEnumberable type to selected list item
         public static IEnumerable<SelectListItem> ToSelectListItem<T>(this IEnumerable<T> items, int selectedValue)
         {
             return from item in items

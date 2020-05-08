@@ -18,24 +18,24 @@ namespace GraniteHouse.Areas.Identity.Pages.Account
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly RoleManager<IdentityRole> _roleManager; 
-
+        //without this, we cannot create new roles
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public RegisterModel(
-            UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
+            UserManager<IdentityUser> userManager,
             RoleManager<IdentityRole> roleManager)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
             _roleManager = roleManager;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -63,11 +63,15 @@ namespace GraniteHouse.Areas.Identity.Pages.Account
 
             [Required]
             public string Name { get; set; }
+
+
             [Required]
             [Display(Name = "Phone Number")]
             public string PhoneNumber { get; set; }
+
+
             [Display(Name = "Super Admin")]
-            public bool isSuperAdmin { get; set; }
+            public bool IsSuperAdmin { get; set; }
         }
 
         public void OnGet(string returnUrl = null)
@@ -80,22 +84,12 @@ namespace GraniteHouse.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                //making two kinds of role to the database : super admin and user
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name=Input.Name, PhoneNumber=Input.PhoneNumber };
-                //create a new user to database
+                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email, Name = Input.Name, PhoneNumber = Input.PhoneNumber };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {
-                    if(!await _roleManager.RoleExistsAsync(SD.AdminEndUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.AdminEndUser));
-                    }
-                    if (!await _roleManager.RoleExistsAsync(SD.SuperAdminEndUser))
-                    {
-                        await _roleManager.CreateAsync(new IdentityRole(SD.SuperAdminEndUser));
-                    }
 
-                    if (Input.isSuperAdmin)
+                    if (Input.IsSuperAdmin)
                     {
                         await _userManager.AddToRoleAsync(user, SD.SuperAdminEndUser);
                     }
@@ -104,9 +98,12 @@ namespace GraniteHouse.Areas.Identity.Pages.Account
                         await _userManager.AddToRoleAsync(user, SD.AdminEndUser);
                     }
 
+
                     _logger.LogInformation("User created a new account with password.");
 
-                    return RedirectToAction("Index", "AdminUsers", new { area = "Admin" } );
+                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                    return RedirectToAction("Index", "AdminUsers", new { area = "Admin" });
 
                 }
                 foreach (var error in result.Errors)

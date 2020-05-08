@@ -12,7 +12,9 @@ namespace GraniteHouse.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
+        //available flag
         public bool Available { get; set; }
+        //receive the part of the image where it resides on the server
         public string Image { get; set; }
         public string ShadeColor { get; set; }
 

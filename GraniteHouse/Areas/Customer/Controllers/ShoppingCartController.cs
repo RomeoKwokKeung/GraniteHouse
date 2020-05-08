@@ -29,7 +29,7 @@ namespace GraniteHouse.Areas.Customer.Controllers
         }
 
         //Get Index Shopping Cart
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             List<int> lstShoppingCart = HttpContext.Session.Get<List<int>>("ssShoppingCart");
             if (lstShoppingCart.Count > 0)

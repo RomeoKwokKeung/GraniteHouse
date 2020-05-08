@@ -9,6 +9,7 @@ namespace GraniteHouse.Extensions
 {
     public static class SessionExtensions
     {
+        //this script was copied from MS tutorial website 
         public static void Set<T>(this ISession session, string key, T value)
         {
             session.SetString(key, JsonConvert.SerializeObject(value));

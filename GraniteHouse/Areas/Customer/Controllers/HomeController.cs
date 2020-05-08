@@ -32,11 +32,10 @@ namespace GraniteHouse.Controllers
         public async Task<IActionResult> Details(int id)
         {
             var product = await _db.Products.Include(m => m.ProductTypes).Include(m => m.SpecialTags).Where(m => m.Id == id).FirstOrDefaultAsync();
-
-
             return View(product);
         }
 
+        //add it to the shopping cart
         [HttpPost, ActionName("Details")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DetailsPost(int id)
@@ -47,10 +46,10 @@ namespace GraniteHouse.Controllers
                 lstShoppingCart = new List<int>();
             }
             lstShoppingCart.Add(id);
+            //set a new sesstion
             HttpContext.Session.Set("ssShoppingCart", lstShoppingCart);
 
             return RedirectToAction("Index", "Home", new { area = "Customer" });
-
         }
 
         public IActionResult Remove(int id)
