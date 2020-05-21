@@ -12622,19 +12622,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\solom\\.nuget\\packages\\": {}
+    "C:\\Users\\Solomon Yue\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\solom\\source\\repos\\GraniteHouse\\GraniteHouse\\GraniteHouse.csproj",
+      "projectUniqueName": "C:\\Users\\Solomon Yue\\Documents\\GitHub\\GraniteHouse\\GraniteHouse\\GraniteHouse.csproj",
       "projectName": "GraniteHouse",
-      "projectPath": "C:\\Users\\solom\\source\\repos\\GraniteHouse\\GraniteHouse\\GraniteHouse.csproj",
-      "packagesPath": "C:\\Users\\solom\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\solom\\source\\repos\\GraniteHouse\\GraniteHouse\\obj\\",
+      "projectPath": "C:\\Users\\Solomon Yue\\Documents\\GitHub\\GraniteHouse\\GraniteHouse\\GraniteHouse.csproj",
+      "packagesPath": "C:\\Users\\Solomon Yue\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Solomon Yue\\Documents\\GitHub\\GraniteHouse\\GraniteHouse\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\solom\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Solomon Yue\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12690,7 +12690,7 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.300\\RuntimeIdentifierGraph.json"
       }
     }
   }
