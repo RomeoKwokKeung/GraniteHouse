@@ -141,7 +141,6 @@ namespace GraniteHouse.Areas.Admin.Controllers
 
         }
 
-
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditPOST(int? id, AppointmentDetailsViewModel objAppointmentVM)
@@ -158,16 +157,17 @@ namespace GraniteHouse.Areas.Admin.Controllers
             appointmentFromDb.CustomerPhoneNumber = objAppointmentVM.Appointment.CustomerPhoneNumber;
             appointmentFromDb.AppointmentDate = objAppointmentVM.Appointment.AppointmentDate;
             appointmentFromDb.isConfirmed = objAppointmentVM.Appointment.isConfirmed;
+
             if (User.IsInRole(SD.SuperAdminEndUser))
             {
                 appointmentFromDb.SalesPersonId = objAppointmentVM.Appointment.SalesPersonId;
             }
             await _db.SaveChangesAsync();
 
+            //it is important
             appointmentFromDb.Id = objAppointmentVM.Appointment.Id;
             return RedirectToAction(nameof(Index));
         }
-
 
         //GET Detials
         public IActionResult Details(int? id)
